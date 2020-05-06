@@ -84,7 +84,9 @@ const nameInput = document.querySelector('#name-input');
 const nameOutput = document.querySelector('#name-output');
 
 function inputChange(event) {
-  nameInput.value ? (nameOutput.textContent = event.currentTarget.value) : '';
+  nameInput.value
+    ? (nameOutput.textContent = event.currentTarget.value)
+    : (nameOutput.textContent = 'незнакомец');
 }
 
 nameInput.addEventListener('input', inputChange);
@@ -94,9 +96,13 @@ nameInput.addEventListener('input', inputChange);
 const validationInput = document.querySelector('#validation-input');
 
 function validationInputBlur() {
-  validationInput.value.length === 6
-    ? validationInput.classList.add('valid')
-    : validationInput.classList.add('invalid');
+  if (validationInput.value.length === 6) {
+    validationInput.classList.add('valid');
+    validationInput.classList.remove('invalid');
+  } else {
+    validationInput.classList.add('invalid');
+    validationInput.classList.remove('valid');
+  }
 }
 
 validationInput.addEventListener('blur', validationInputBlur);
@@ -125,14 +131,16 @@ renderBtn.addEventListener('click', () => createBoxes(inputNumber.value));
 destroyBtn.addEventListener('click', destroyBoxes);
 
 function createBoxes(amount) {
+  let newDivs = [];
   for (let i = 0; i < amount; i += 1) {
     const newDiv = document.createElement('div');
     newDiv.style.width = `${30 + i * 10}px`;
     newDiv.style.height = `${30 + i * 10}px`;
     newDiv.style.backgroundColor =
       '#' + (((1 << 24) * Math.random()) | 0).toString(16);
-    boxes.append(newDiv);
+    newDivs.push(newDiv);
   }
+  boxes.append(...newDivs);
 }
 
 function destroyBoxes() {
